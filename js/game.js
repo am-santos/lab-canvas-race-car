@@ -26,12 +26,17 @@ class Game {
     this.car = new Car(this);
   }
 
+  startGame() {
+    this.draw();
+    this.gameIsPlaying = true;
+  }
+
   createArrayOfObstacles() {
     let obstacles = [];
     for (let i = 0; i < 50; i++) {
-      const obstacle = new Obstacles(this);
+      let obstacle = new Obstacles(this);
       obstacle.x = Math.random() * (this.width - obstacle.width);
-      obstacle.y = this.height / 2 - i * 2 * obstacle.height;
+      obstacle.y = -i * 5 * obstacle.height; // five is the number of obstacles widths that seperates them in height.
       obstacles.push(obstacle);
     }
 
@@ -39,7 +44,9 @@ class Game {
   }
 
   loop() {
-    this.draw();
+    this.clearEverything();
+    this.board.draw();
+    this.car.draw();
 
     const arrayOfObstacles = this.arrayOfObstacles;
     if (!arrayOfObstacles) {
@@ -48,12 +55,23 @@ class Game {
       for (let obstacle of this.arrayOfObstacles) {
         obstacle.move();
         obstacle.draw();
+        const collision = obstacle.checkCollision();
+        console.log('collision value', collision);
+        if (collision) {
+          gameIsPlaying = false;
+          console.log('Collision');
+        }
       }
     }
 
-    setTimeout(() => {
-      this.loop();
-    }, 1000 / 10);
+    if (this.gameIsPlaying) {
+      setTimeout(() => {
+        this.loop();
+      }, 1000 / 100);
+    } else {
+      this.reset();
+      this.startGame();
+    }
   }
 
   draw() {
@@ -72,11 +90,9 @@ class Game {
       switch (keyCode) {
         case 37: // Left
           this.car.move('left');
-          this.loop();
           break;
         case 39: // Right
           this.car.move('right');
-          this.loop();
           break;
       }
     });

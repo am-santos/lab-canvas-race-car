@@ -6,9 +6,6 @@ class Obstacles {
     this.x;
     this.y;
 
-    //Obstacles starting height
-    this.startingHeight = this.game.height / 2 - this.height;
-
     // Obstacles Speed
     // this.speed = 10;
     // Obstacles dimensions
@@ -27,5 +24,15 @@ class Obstacles {
 
   move() {
     this.y += this.game.speed;
+  }
+
+  checkCollision() {
+    // return true or false
+    const car = this.game.car;
+    return (
+      this.y + this.height > car.y && // bottom side of Obstacle > Upper side of Car
+      this.x + this.width > car.x && // right side of Obstacle > Left side of Car
+      this.x > car.x + car.carWidth // left side of Obstacle < Right side of Car
+    );
   }
 }

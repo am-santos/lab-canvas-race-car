@@ -8,7 +8,7 @@ class Car {
     this.x = game.width / 2 - this.carWidth / 2;
     this.y = game.height - this.carHeight;
     // Car Speed
-    this.speed = 100;
+    this.speed = 50;
   }
 
   draw() {
